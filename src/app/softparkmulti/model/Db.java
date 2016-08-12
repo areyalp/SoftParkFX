@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
 
 public class Db {
 	
@@ -21,17 +20,17 @@ public class Db {
 		InputStream propertiesInput;
 		String host, database, dbuser, dbpassword;
 		try{
-			propertiesInput = getClass().getResourceAsStream("config.properties");
+			propertiesInput = getClass().getResourceAsStream("file:resources/config.properties");
 			// load a properties file
 			prop.load(propertiesInput);
 			host = prop.getProperty("host");
 			database = prop.getProperty("database");
 			dbuser = prop.getProperty("dbuser");
-			dbpassword = prop.getProperty("dbpassword");
+			dbpassword = prop.getProperty("dbpassword"); 
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, dbuser, dbpassword);
 		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null, ex.getMessage());
+			//JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
 	}
 	
@@ -56,7 +55,7 @@ public class Db {
 			queryResult = sqlState.executeQuery(queryString);
 			
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
+			//JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		return queryResult;
 	}
