@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+//import javax.swing.JOptionPane;
+
 
 public class Db {
 	
@@ -20,13 +22,15 @@ public class Db {
 		InputStream propertiesInput;
 		String host, database, dbuser, dbpassword;
 		try{
-			propertiesInput = getClass().getResourceAsStream("file:resources/config.properties");
+			propertiesInput = getClass().getResourceAsStream("../config.properties");
+			
 			// load a properties file
 			prop.load(propertiesInput);
 			host = prop.getProperty("host");
 			database = prop.getProperty("database");
 			dbuser = prop.getProperty("dbuser");
 			dbpassword = prop.getProperty("dbpassword"); 
+			//JOptionPane.showMessageDialog(null, host);
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, dbuser, dbpassword);
 		}catch(Exception ex){
