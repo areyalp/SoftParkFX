@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.media.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="890.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.softparkmulti.view.HomeViewController">
+   <right>
+      <TreeView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </right>
+   <top>
+      <VBox prefHeight="63.0" prefWidth="661.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="Archivo">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Reimprimir Factura" />
+                        <MenuItem mnemonicParsing="false" text="Cerrar Sesión" />
+                        <MenuItem mnemonicParsing="false" text="Salir" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Ver">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Resumen del Cierre Actual" />
+                        <CheckMenuItem mnemonicParsing="false" text="Barra de Herramientas" />
+                        <CheckMenuItem mnemonicParsing="false" text="Barra de Estado" />
+                        <MenuItem mnemonicParsing="false" text="Log" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Sistema">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Limpiar Pantalla" />
+                        <MenuItem mnemonicParsing="false" text="Personalizar Factura" />
+                        <MenuItem mnemonicParsing="false" text="Detalle de Última Transacción" />
+                        <MenuItem mnemonicParsing="false" text="Calculadora" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Reportes">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Reporte Fiscal Diario (Z)" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Ayuda">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Acerca de" />
+                    </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
+            <HBox prefHeight="42.0" prefWidth="661.0" style="-fx-background-color: CFC9D1;">
+               <children>
+                  <Button id="btn_sistemadecobro" mnemonicParsing="false" onAction="#handleCobro" prefHeight="76.0" prefWidth="200.0" text="Sistema de cobro" />
+                  <Button id="btn_cierre" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleCierre" prefHeight="74.0" prefWidth="200.0" text="Cierre" />
+                  <Button id="btn_ticketmanual" mnemonicParsing="false" onAction="#handleTicket_Manual" prefHeight="76.0" prefWidth="200.0" text="Ticket manual" />
+                  <Button id="btn_ticketperdido" mnemonicParsing="false" onAction="#handleTicket_Lost" prefHeight="76.0" prefWidth="200.0" text="Ticket perdido" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>
