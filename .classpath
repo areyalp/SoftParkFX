@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/joda-time-2.9.4-no-tzdb.jar"/>
 	<classpathentry kind="lib" path="lib/joda-time-2.9.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/joda-time-2.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.36-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

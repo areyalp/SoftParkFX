@@ -16,6 +16,7 @@ public class LoginDialogController {
 	
 	private Stage dialogStage;
 	private boolean succeeded;
+	private boolean action; //true for access 
 	
 	/**
      *This method is automatically called after the fxml file has been loaded.
@@ -37,6 +38,8 @@ public class LoginDialogController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
+    
+
 	
 	
 	@FXML
@@ -47,6 +50,12 @@ public class LoginDialogController {
 		
 		if (Login.authenticate(username, password)) {
             succeeded = true;
+            MessageBox.show(dialogStage, "Acceso concedido", 
+        			"Usuario y contraseña válidos", 
+        			"You're good to go :)",
+        			MessageBox.typeConfirmation);
+            dialogStage.close();
+            action = true;
             //dispose();
         } else {
         	
@@ -62,14 +71,6 @@ public class LoginDialogController {
         	
         }
 		
-		/*Alert alert = new Alert(AlertType.INFORMATION);
-        alert.initOwner(dialogStage);
-        alert.setTitle("Hey!");
-        alert.setHeaderText("You're trying to access with the following credentials:");
-        alert.setContentText("Username: " + username
-        		+ "\r\n Password: " + password + "\r\n Click OK to continue...");
-        alert.showAndWait();*/
-		
 	}
 	
 	@FXML
@@ -84,14 +85,19 @@ public class LoginDialogController {
     }
  
     private String getPassword() {
-        return new String(txtPassword.getText());
+        return txtPassword.getText();
     }
  
 	
     protected boolean isSucceeded() {
         return succeeded;
     }
-	
+    
+    public boolean getAction(){
+    	return action;
+    }
+    
+
 	
 	
 
