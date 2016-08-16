@@ -1,5 +1,6 @@
 package app.softparkmulti.model;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
+import com.mysql.jdbc.Driver;
+
+import app.softparkmulti.util.MessageBox;
 
 //import javax.swing.JOptionPane;
 
@@ -20,21 +24,38 @@ public class Db {
 	public Db() {
 		Properties prop = new Properties();
 		InputStream propertiesInput;
-		String host, database, dbuser, dbpassword;
+		String host = "", database = "", dbuser = "", dbpassword = "";
+		String dbuser2 = "", dbpassword2 = "";
+		
 		try{
-			propertiesInput = getClass().getResourceAsStream("../config.properties");
-			
+			propertiesInput = getClass().getResourceAsStream("/config.properties");
 			// load a properties file
 			prop.load(propertiesInput);
 			host = prop.getProperty("host");
 			database = prop.getProperty("database");
 			dbuser = prop.getProperty("dbuser");
-			dbpassword = prop.getProperty("dbpassword"); 
+			dbpassword = prop.getProperty("dbpassword");
+			dbuser2 = prop.getProperty("dbuser2");
+			dbpassword2 = prop.getProperty("dbpassword2");
+		}catch(IOException ex){
+			MessageBox.show(null, "Error DB", "Error de configuracion", 
+					"Error al obtener la configuracion de conexion a la DB", 
+					MessageBox.typeError);
+		}
+		
+		try{
 			//JOptionPane.showMessageDialog(null, host);
-			Class.forName("com.mysql.jdbc.Driver");
+			// Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, dbuser, dbpassword);
 		}catch(Exception ex){
 			//JOptionPane.showMessageDialog(null, ex.getMessage());
+			try{
+				conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, dbuser2, dbpassword2);
+			}catch(SQLException ex2){
+				MessageBox.show(null, "Error DB", "Error de conexion", 
+						"Error de conexion a la DB", 
+						MessageBox.typeError);
+			}
 		}
 	}
 	

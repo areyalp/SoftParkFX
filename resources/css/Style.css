@@ -1,7 +1,7 @@
 #btn_login {       
     /*-fx-background-image: url("loginblue.png");
     -fx-graphic: url("loginblue.png"); */
-    -fx-graphic: url("check_blue.png");
+    -fx-graphic: url("../images/check_blue.png");
     -fx-background-color: transparent;
     -fx-background-radius:100;
 }
@@ -9,26 +9,26 @@
 #btn_close{
 	
 	 /*-fx-graphic: url("close.png"); */
-	 -fx-graphic: url("cross_red.png");
+	 -fx-graphic: url("../images/cross_red.png");
 	  -fx-background-color: transparent;
 	      -fx-background-radius:100;
 }
 
 
 #btn_sistemadecobro {       
-    -fx-graphic: url("cash_register.png");
+    -fx-graphic: url("../images/cash_register.png");
 }
 
 #btn_cierre {       
-    -fx-graphic: url("lock.png");
+    -fx-graphic: url("../images/lock.png");
 }
 
 #btn_ticketmanual {       
-    -fx-graphic: url("new_ticket.png");
+    -fx-graphic: url("../images/new_ticket.png");
 }
 
 #btn_ticketperdido {       
-    -fx-graphic: url("lost_ticket.png");
+    -fx-graphic: url("../images/lost_ticket.png");
 }
 
 .button{
