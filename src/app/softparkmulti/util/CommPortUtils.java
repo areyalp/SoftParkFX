@@ -9,7 +9,7 @@ public class CommPortUtils {
 	}
 	
 	
-	protected static String[] getSerialPorts(){
+	public static String[] getSerialPorts(){
 			String[] portEnum = SerialPortList.getPortNames();
 			return portEnum;
 	}

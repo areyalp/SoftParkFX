@@ -78,6 +78,7 @@ public class MainSoftPark extends Application {
 	        Scene scene = new Scene(homeView);
 	        primaryStage.setScene(scene);
 	        primaryStage.setTitle("SoftPark - Home");
+	        primaryStage.setMaximized(true);
             primaryStage.show();
             
             //Instantiate the controller

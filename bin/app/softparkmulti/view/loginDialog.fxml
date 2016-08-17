@@ -34,11 +34,11 @@
             <PasswordField fx:id="txtPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button id="btn_close" graphicTextGap="0.0" layoutX="203.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="76.0" prefWidth="182.0" stylesheets="@Style.css" text="Salir" textFill="#3422a4">
+      <Button id="btn_close" graphicTextGap="0.0" layoutX="203.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="76.0" prefWidth="182.0" stylesheets="@../../../../resources/css/Style.css" text="Salir" textFill="#3422a4">
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Button id="btn_login" graphicTextGap="0.0" layoutX="54.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="76.0" prefWidth="162.0" stylesheets="@Style.css" text="Login" textFill="#3422a4">
+      <Button id="btn_login" graphicTextGap="0.0" layoutX="54.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="76.0" prefWidth="162.0" stylesheets="@../../../../resources/css/Style.css" text="Login" textFill="#3422a4">
          <font>
             <Font size="18.0" />
          </font>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.media.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="890.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.softparkmulti.view.HomeViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="890.0" stylesheets="@../../../../resources/css/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.softparkmulti.view.HomeViewController">
    <right>
-      <TreeView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TreeView prefHeight="318.0" prefWidth="242.0" BorderPane.alignment="CENTER" />
    </right>
    <top>
       <VBox prefHeight="63.0" prefWidth="661.0" BorderPane.alignment="CENTER">
@@ -50,7 +52,7 @@
                   </Menu>
               </menus>
             </MenuBar>
-            <HBox prefHeight="42.0" prefWidth="661.0" style="-fx-background-color: CFC9D1;">
+            <HBox prefHeight="42.0" prefWidth="661.0" style="-fx-background-color: E6E6E6;">
                <children>
                   <Button id="btn_sistemadecobro" mnemonicParsing="false" onAction="#handleCobro" prefHeight="76.0" prefWidth="200.0" text="Sistema de cobro" />
                   <Button id="btn_cierre" graphicTextGap="15.0" mnemonicParsing="false" onAction="#handleCierre" prefHeight="74.0" prefWidth="200.0" text="Cierre" />
@@ -61,4 +63,31 @@
          </children>
       </VBox>
    </top>
+   <bottom>
+      <HBox prefHeight="48.0" prefWidth="890.0" style="-fx-background-color: E6E6E6;" BorderPane.alignment="CENTER">
+         <children>
+            <MenuButton fx:id="btn_printer" mnemonicParsing="false" prefHeight="52.0" prefWidth="92.0" text="•">
+              <items>
+                  <Menu fx:id="item_ports" mnemonicParsing="false" onAction="#handlePrinterPort" text="Puertos" />
+                <MenuItem fx:id="item_conn" mnemonicParsing="false" onAction="#handlePrinterConn" text="Conectar" />
+              </items>
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </MenuButton>
+            <VBox alignment="CENTER" prefHeight="52.0" prefWidth="806.0" style="-fx-background-color: E6E6E6;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="label_status" text="Estado de conexión">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
