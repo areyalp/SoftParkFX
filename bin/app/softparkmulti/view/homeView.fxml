@@ -66,7 +66,7 @@
    <bottom>
       <HBox prefHeight="48.0" prefWidth="890.0" style="-fx-background-color: E6E6E6;" BorderPane.alignment="CENTER">
          <children>
-            <MenuButton fx:id="btn_printer" mnemonicParsing="false" prefHeight="52.0" prefWidth="92.0" text="•">
+            <MenuButton fx:id="btn_printer" mnemonicParsing="false" prefHeight="37.0" prefWidth="105.0" text="•">
               <items>
                   <Menu fx:id="item_ports" mnemonicParsing="false" onAction="#handlePrinterPort" text="Puertos" />
                 <MenuItem fx:id="item_conn" mnemonicParsing="false" onAction="#handlePrinterConn" text="Conectar" />
@@ -75,7 +75,7 @@
                   <Font size="20.0" />
                </font>
                <HBox.margin>
-                  <Insets left="5.0" />
+                  <Insets bottom="5.0" left="5.0" />
                </HBox.margin>
             </MenuButton>
             <VBox alignment="CENTER" prefHeight="52.0" prefWidth="806.0" style="-fx-background-color: E6E6E6;" HBox.hgrow="ALWAYS">

@@ -1,15 +1,19 @@
 package app.softparkmulti.view;
 
-import javax.swing.JMenuItem;
-
 import app.softparkmulti.util.CommPortUtils;
 import app.softparkmulti.util.MessageBox;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import tfhka.ve.Tfhka;
 
 public class HomeViewController {
 
@@ -22,8 +26,13 @@ public class HomeViewController {
 	@FXML
 	private MenuButton btn_printer;
 	
-	
 	private Stage homeStage;
+	
+	private boolean isPrinterConnected;
+	private Tfhka fiscalPrinter;
+	private String activePort;
+
+
 	
 	public HomeViewController() {
 		// TODO Auto-generated constructor stub
@@ -35,28 +44,9 @@ public class HomeViewController {
 		@FXML
 		private void initialize(){
 			
-			String[] serialPorts = null;
-			try {
-
-				serialPorts = CommPortUtils.getSerialPorts();
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			if (serialPorts.length == 0) {
-				
-				item_ports.getItems().add(new MenuItem("No hay puertos COM"));
-
-			} else {
-				for (String port : serialPorts) {
-					item_ports.getItems().add(new MenuItem(port));
-
-					/*subMenuItem.setActionCommand(port);
-					subMenuItem.addActionListener(lForMenuItem);
-					subMenu2.add(subMenuItem);*/
-				}
-			}
+			getCOMPortItems();
 		}
+		
 		@FXML
 		private void handleCierre(){
 			
@@ -81,13 +71,32 @@ public class HomeViewController {
 		private void handlePrinter(){
 			
 		}
+		
 		@FXML
 		private void handlePrinterConn(){
 			
+			final Task<Void> oTask = OpenCOMTask();
+			
+
+			oTask.setOnFailed(a ->{
+				label_status.setText("Failed");
+				btn_printer.setTextFill(Color.web("#F50C0C")); 
+				homeStage.show();
+			});
+			
+			if (!activePort.isEmpty() && !activePort.equals(null)) {
+				Thread thread = new Thread(oTask);
+			    thread.setDaemon(true);
+			    thread.start();
+			} else {
+				label_status.setText("No hay puerto COM activo");
+			}
+		
+
 		}
 		@FXML
 		private void handlePrinterPort(){
-			MessageBox.show(homeStage, "Printer port", "Testing", " ", MessageBox.typeInformation);
+			//MessageBox.show(homeStage, "Printer port", "Testing", " ", MessageBox.typeInformation);
 			
 		}
 		
@@ -95,5 +104,85 @@ public class HomeViewController {
 	    public void setDialogStage(Stage dialogStage) {
 	        this.homeStage = dialogStage;
 	    }
+	    
+	    public void getCOMPortItems(){
+	    	
+	    	String[] serialPorts = null;
+			try {
+
+				serialPorts = CommPortUtils.getSerialPorts();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			if (serialPorts.length == 0) {
+				
+				item_ports.getItems().add(new MenuItem("No hay puertos COM"));
+
+			} else {
+				for (String port : serialPorts) {
+					
+					MenuItem portItem = new MenuItem(port);
+					
+					portItem.setOnAction(new EventHandler<ActionEvent>(){
+						
+						public void handle(ActionEvent e){
+							activePort = portItem.getText();
+							label_status.setText("Puerto " + activePort + " seleccionado.");
+
+						}
+						
+					});
+					
+					item_ports.getItems().add(portItem);
+
+				}
+			}
+	    	
+	    }
+	    
+	    
+	    private Task<Void> OpenCOMTask(){
+	    	
+	    	return new Task<Void>() {
+	    
+	        @Override public Void call() {
+	        	if (fiscalPrinter.OpenFpctrl(activePort)){
+	        		
+	        		isPrinterConnected = true;
+	    			item_conn.setText("Desconectar");
+	        		label_status.setText("Conectado al puerto " + activePort);
+					btn_printer.setTextFill(Color.web("#1bea25")); 
+					
+				} else {
+					isPrinterConnected = false;
+					item_conn.setText("Conectar");
+					btn_printer.setTextFill(Color.web("#000000")); 
+					label_status.setText("Error al conectarse a la impresora");
+					fiscalPrinter.CloseFpctrl();
+				}
+	            
+	            return null;
+	        }
+	    	
+	    	};
+	    }
+
+	    private Task<Void> CloseCOMTask(){
+	    	return new Task<Void>(){
+	    		 @Override public Void call() {
+	    			 
+	    			 fiscalPrinter.CloseFpctrl();
+	    			 label_status.setText("Se desconectó la impresora");
+	    			 return null;
+	    			 
+	    		 }
+	    		
+	    	};
+	    	
+	    }
+	    
+	    
+	    
 		
 }
