@@ -2,6 +2,7 @@ package app.softparkmulti.view;
 
 import app.softparkmulti.util.CommPortUtils;
 import app.softparkmulti.util.MessageBox;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,7 +44,7 @@ public class HomeViewController {
      */
 		@FXML
 		private void initialize(){
-			
+			fiscalPrinter = new tfhka.ve.Tfhka();
 			getCOMPortItems();
 		}
 		
@@ -52,21 +53,25 @@ public class HomeViewController {
 			
 			MessageBox.show(homeStage, "Cierre", "Testing ", " ", MessageBox.typeInformation);
 		}
+		
 		@FXML
 		private void handleCobro(){
 			
 			MessageBox.show(homeStage, "Cobro", "Testing", " ", MessageBox.typeInformation);
 		}
+		
 		@FXML
 		private void handleTicket_Manual(){
 			
 			MessageBox.show(homeStage, "Ticket manual", "Testing", " ", MessageBox.typeInformation);
 		}
+		
 		@FXML
 		private void handleTicket_Lost(){
 			MessageBox.show(homeStage, "Ticket perdido", "Testing", " ", MessageBox.typeInformation);
 			
 		}
+		
 		@FXML
 		private void handlePrinter(){
 			
@@ -75,7 +80,7 @@ public class HomeViewController {
 		@FXML
 		private void handlePrinterConn(){
 			
-			final Task<Void> oTask = OpenCOMTask();
+			Task<Boolean> oTask = OpenCOMTask();
 			
 
 			oTask.setOnFailed(a ->{
@@ -86,7 +91,7 @@ public class HomeViewController {
 			
 			if (!activePort.isEmpty() && !activePort.equals(null)) {
 				Thread thread = new Thread(oTask);
-			    thread.setDaemon(true);
+			    //thread.setDaemon(true);
 			    thread.start();
 			} else {
 				label_status.setText("No hay puerto COM activo");
@@ -94,13 +99,13 @@ public class HomeViewController {
 		
 
 		}
+		
 		@FXML
 		private void handlePrinterPort(){
 			//MessageBox.show(homeStage, "Printer port", "Testing", " ", MessageBox.typeInformation);
 			
 		}
 		
-
 	    public void setDialogStage(Stage dialogStage) {
 	        this.homeStage = dialogStage;
 	    }
@@ -141,39 +146,55 @@ public class HomeViewController {
 	    	
 	    }
 	    
-	    
-	    private Task<Void> OpenCOMTask(){
+	    private Task<Boolean> OpenCOMTask(){
 	    	
-	    	return new Task<Void>() {
-	    
-	        @Override public Void call() {
-	        	if (fiscalPrinter.OpenFpctrl(activePort)){
-	        		
-	        		isPrinterConnected = true;
-	    			item_conn.setText("Desconectar");
-	        		label_status.setText("Conectado al puerto " + activePort);
-					btn_printer.setTextFill(Color.web("#1bea25")); 
-					
-				} else {
-					isPrinterConnected = false;
-					item_conn.setText("Conectar");
-					btn_printer.setTextFill(Color.web("#000000")); 
-					label_status.setText("Error al conectarse a la impresora");
-					fiscalPrinter.CloseFpctrl();
+	    	Task<Boolean> tsk = new Task<Boolean>() {
+
+				@Override
+				protected Boolean call() throws Exception {
+					if (fiscalPrinter.OpenFpctrl(activePort)){
+		        		
+		        		isPrinterConnected = true;
+		    			Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								item_conn.setText("Desconectar");
+								label_status.setText("Conectado al puerto " + activePort);
+								btn_printer.setTextFill(Color.web("#1bea25"));
+							}
+						});
+						return true;
+						
+					} else {
+						isPrinterConnected = false;
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								item_conn.setText("Conectar");
+								btn_printer.setTextFill(Color.web("#000000"));
+								label_status.setText("Error al conectarse a la impresora");
+							}
+						});
+						fiscalPrinter.CloseFpctrl();
+					}
+					return false;
 				}
-	            
-	            return null;
-	        }
-	    	
+	    		
 	    	};
+	    	
+	    	return tsk;
 	    }
 
 	    private Task<Void> CloseCOMTask(){
 	    	return new Task<Void>(){
 	    		 @Override public Void call() {
-	    			 
 	    			 fiscalPrinter.CloseFpctrl();
-	    			 label_status.setText("Se desconectó la impresora");
+	    			 Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							label_status.setText("Se desconectó la impresora");
+						}
+					});
 	    			 return null;
 	    			 
 	    		 }
@@ -182,7 +203,4 @@ public class HomeViewController {
 	    	
 	    }
 	    
-	    
-	    
-		
 }

@@ -3,6 +3,7 @@ package app.softparkmulti.view;
 import app.softparkmulti.util.MessageBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import app.softparkmulti.model.Login;
@@ -13,6 +14,8 @@ public class LoginDialogController {
 	private TextField txtUser;
 	@FXML
 	private PasswordField txtPassword;
+	@FXML
+	private Button btn_login;
 	
 	private Stage dialogStage;
 	private boolean succeeded;
@@ -23,7 +26,7 @@ public class LoginDialogController {
      */
 	@FXML
 	private void initialize(){
-		
+		btn_login.setDefaultButton(true);
 	}
 	
 	public LoginDialogController() {
