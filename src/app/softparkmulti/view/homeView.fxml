@@ -70,6 +70,7 @@
               <items>
                   <Menu fx:id="item_ports" mnemonicParsing="false" onAction="#handlePrinterPort" text="Puertos" />
                 <MenuItem fx:id="item_conn" mnemonicParsing="false" onAction="#handlePrinterConn" text="Conectar" />
+                  <MenuItem fx:id="item_test" mnemonicParsing="false" onAction="#handleTest" text="Test" />
               </items>
                <font>
                   <Font size="20.0" />

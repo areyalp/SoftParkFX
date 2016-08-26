@@ -1,5 +1,6 @@
 package app.softparkmulti.view;
 
+import app.softparkmulti.model.PrinterCommand;
 import app.softparkmulti.util.CommPortUtils;
 import app.softparkmulti.util.MessageBox;
 import javafx.application.Platform;
@@ -12,8 +13,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import tfhka.PrinterException;
 import tfhka.ve.Tfhka;
 
 public class HomeViewController {
@@ -26,6 +27,8 @@ public class HomeViewController {
 	private Label label_status;
 	@FXML
 	private MenuButton btn_printer;
+	@FXML
+	private MenuItem item_test;
 	
 	private Stage homeStage;
 	
@@ -80,19 +83,35 @@ public class HomeViewController {
 		@FXML
 		private void handlePrinterConn(){
 			
-			Task<Boolean> oTask = OpenCOMTask();
-			
+			//Task<Boolean> oTask = OpenCOMTask();
+			//Task<Void> cTask = CloseCOMTask();
 
-			oTask.setOnFailed(a ->{
+
+			/*oTask.setOnFailed(a ->{
 				label_status.setText("Failed");
 				btn_printer.setTextFill(Color.web("#F50C0C")); 
 				homeStage.show();
-			});
+			});*/
 			
 			if (!activePort.isEmpty() && !activePort.equals(null)) {
-				Thread thread = new Thread(oTask);
-			    //thread.setDaemon(true);
-			    thread.start();
+				
+				startCOMThread(item_conn.getText());
+				/*
+				Thread thread;
+				if (item_conn.getText().equals("Conectar"))
+				{
+				    //thread = new Thread(oTask);
+				    thread = new Thread(OpenCOMTask());
+
+				}
+				else{
+					//thread = new Thread(cTask);
+					thread = new Thread(CloseCOMTask());
+				}
+				
+				thread.setDaemon(true);
+			    thread.start();*/
+				
 			} else {
 				label_status.setText("No hay puerto COM activo");
 			}
@@ -100,11 +119,27 @@ public class HomeViewController {
 
 		}
 		
+		
 		@FXML
 		private void handlePrinterPort(){
 			//MessageBox.show(homeStage, "Printer port", "Testing", " ", MessageBox.typeInformation);
 			
 		}
+		
+		@FXML
+		private void handleTest(){
+
+			boolean sentCmd =false;
+			try {
+				 sentCmd = fiscalPrinter.SendCmd(PrinterCommand.printTest());
+
+			} catch (PrinterException e) {
+				e.printStackTrace();
+			}
+			MessageBox.show(homeStage, "test",  String.valueOf(sentCmd), "", MessageBox.typeInformation);
+
+		}
+		
 		
 	    public void setDialogStage(Stage dialogStage) {
 	        this.homeStage = dialogStage;
@@ -134,7 +169,7 @@ public class HomeViewController {
 						public void handle(ActionEvent e){
 							activePort = portItem.getText();
 							label_status.setText("Puerto " + activePort + " seleccionado.");
-
+							startCOMThread("Conectar");
 						}
 						
 					});
@@ -145,6 +180,25 @@ public class HomeViewController {
 			}
 	    	
 	    }
+	    
+
+		protected void startCOMThread(String action){
+			Thread thread;
+			if (action.equals("Conectar"))
+			{
+			    thread = new Thread(OpenCOMTask());
+
+			}
+			else{
+				thread = new Thread(CloseCOMTask());
+			}
+			
+			thread.setDaemon(true);
+		    thread.start();
+			
+		}
+		
+		
 	    
 	    private Task<Boolean> OpenCOMTask(){
 	    	
@@ -193,6 +247,8 @@ public class HomeViewController {
 						@Override
 						public void run() {
 							label_status.setText("Se desconectó la impresora");
+							item_conn.setText("Conectar");
+							btn_printer.setTextFill(Color.web("#000000"));
 						}
 					});
 	    			 return null;
