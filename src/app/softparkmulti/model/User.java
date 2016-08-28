@@ -7,10 +7,10 @@ public class User {
 	String name;
 	String login;
 	String userType;
-	boolean logToProgram = false;
-	boolean canCheckOut = false;
-	boolean canPrintReportZ = false;
-	boolean canPrintReportX = false;
+	public boolean logToProgram = false;
+	public boolean canCheckOut = false;
+	public boolean canPrintReportZ = false;
+	public boolean canPrintReportX = false;
 
 	public User(int id, int userTypeId, String name, String login, String userType, boolean logToProgram,
 			boolean canCheckOut, boolean canPrintReportZ, boolean canPrintReportX) {

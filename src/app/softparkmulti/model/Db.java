@@ -58,7 +58,7 @@ public class Db {
 		}
 	}
 	
-	protected boolean testConnection() {
+	public boolean testConnection() {
 		String queryString = "SELECT * FROM Users;";
 		ResultSet rows = this.select(queryString);
 		try {
@@ -210,7 +210,7 @@ public class Db {
 		return invoiceCount;
 	}
 	
-	protected static int getUserId(String username) {
+	public static int getUserId(String username) {
 		Db db = new Db();
 		int userId = 0;
 		ResultSet rowUser = db.select("SELECT Id FROM Users WHERE Login = '" + username + "'");
@@ -225,7 +225,7 @@ public class Db {
 		return userId;
 	}
 	
-	protected User loadUserInfo(int userId) {
+	public User loadUserInfo(int userId) {
 		User user = null;
 		ResultSet rowsUser = this.select(
 				"SELECT u.Id, "

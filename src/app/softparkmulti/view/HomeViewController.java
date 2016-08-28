@@ -3,17 +3,26 @@ package app.softparkmulti.view;
 import app.softparkmulti.model.PrinterCommand;
 import app.softparkmulti.util.CommPortUtils;
 import app.softparkmulti.util.MessageBox;
+
+import java.io.IOException;
+
+import app.softparkmulti.MainSoftPark;
+import app.softparkmulti.model.Db;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 import tfhka.PrinterException;
 import tfhka.ve.Tfhka;
 
@@ -22,14 +31,25 @@ public class HomeViewController {
 	@FXML
 	private Menu item_ports;
 	@FXML
-	private MenuItem item_conn;
-	@FXML
 	private Label label_status;
 	@FXML
 	private MenuButton btn_printer;
 	@FXML
-	private MenuItem item_test;
+	private MenuItem item_conn,item_test, item_calc,
+		item_ZReport,item_XReport,item_logout,item_exit;
+	@FXML
+	private CheckMenuItem item_viewToolBar,
+		item_viewStatusBar;
+	@FXML
+	private HBox toolBar;
+	@FXML
+	private VBox upper_box;
+	@FXML
+	private HBox lower_box;
 	
+	
+	private MainSoftPark mainSoftPark;
+	private LoginDialogController loginDialog;
 	private Stage homeStage;
 	
 	private boolean isPrinterConnected;
@@ -71,8 +91,8 @@ public class HomeViewController {
 		
 		@FXML
 		private void handleTicket_Lost(){
-			MessageBox.show(homeStage, "Ticket perdido", "Testing", " ", MessageBox.typeInformation);
-			
+			//MessageBox.show(homeStage, "Ticket perdido", "Testing", " ", MessageBox.typeInformation);
+			mainSoftPark.showTicketLostView();
 		}
 		
 		@FXML
@@ -83,34 +103,11 @@ public class HomeViewController {
 		@FXML
 		private void handlePrinterConn(){
 			
-			//Task<Boolean> oTask = OpenCOMTask();
-			//Task<Void> cTask = CloseCOMTask();
-
-
-			/*oTask.setOnFailed(a ->{
-				label_status.setText("Failed");
-				btn_printer.setTextFill(Color.web("#F50C0C")); 
-				homeStage.show();
-			});*/
 			
 			if (!activePort.isEmpty() && !activePort.equals(null)) {
 				
-				startCOMThread(item_conn.getText());
-				/*
-				Thread thread;
-				if (item_conn.getText().equals("Conectar"))
-				{
-				    //thread = new Thread(oTask);
-				    thread = new Thread(OpenCOMTask());
+				startThread(item_conn.getText());
 
-				}
-				else{
-					//thread = new Thread(cTask);
-					thread = new Thread(CloseCOMTask());
-				}
-				
-				thread.setDaemon(true);
-			    thread.start();*/
 				
 			} else {
 				label_status.setText("No hay puerto COM activo");
@@ -129,21 +126,100 @@ public class HomeViewController {
 		@FXML
 		private void handleTest(){
 
-			boolean sentCmd =false;
-			try {
-				 sentCmd = fiscalPrinter.SendCmd(PrinterCommand.printTest());
-
-			} catch (PrinterException e) {
-				e.printStackTrace();
+			//boolean sentCmd =false;
+			if (isPrinterConnected)
+			{
+				try {
+					 //sentCmd = 
+					fiscalPrinter.SendCmd(PrinterCommand.printTest());
+	
+				} catch (PrinterException e) {
+					e.printStackTrace();
+				}
 			}
-			MessageBox.show(homeStage, "test",  String.valueOf(sentCmd), "", MessageBox.typeInformation);
-
 		}
 		
+		@FXML
+		private void handleLogout(){
+			homeStage.hide();
+			if (mainSoftPark.showLoginDialog())
+			{
+				homeStage.show();
+			}
+		
+			
+		}
+		
+		@FXML
+		private void handleZReport(){
+			startThread("ReporteZ");
+		}
+		
+		@FXML
+		private void handleXReport(){
+			startThread("ReporteX");
+		}
+		
+		 /* Is called by the main application to give a reference back to itself.
+	     * 
+	     * @param mainApp
+	     */
+	    public void setMainApp(MainSoftPark mainApp) {
+	        this.mainSoftPark = mainApp;
+
+	    }
+	    
+	    @FXML
+	    private void handleToolBar(){
+	    	if (item_viewToolBar.isSelected())
+	    	{
+	    		toolBar.setVisible(true);
+	    		upper_box.setPrefHeight(98);
+	    		
+	    	}else{
+	    		toolBar.setVisible(false);
+	    		upper_box.setPrefHeight(25);
+	    	}
+	    	
+	    }
+	    
+	    @FXML
+	    private void handleStatusBar(){
+	    	
+	    	if (item_viewStatusBar.isSelected())
+	    	{
+	    		lower_box.setVisible(true);
+	    		lower_box.setPrefHeight(55);
+	    		
+	    	}else{
+	    		lower_box.setVisible(false);
+	    		lower_box.setPrefHeight(0);
+	    		
+	    	}
+	    }
+	    @FXML
+	    private void handleExit(){
+	    	homeStage.close();
+	    }
+	    
+	    @FXML
+	    private void handleCalc(){
+	    	try {
+				Runtime.getRuntime().exec("calc");
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+	    }
+	    
+	    public void setLogin(LoginDialogController login) {
+	        this.loginDialog = login;
+
+	    }
 		
 	    public void setDialogStage(Stage dialogStage) {
 	        this.homeStage = dialogStage;
 	    }
+	    
 	    
 	    public void getCOMPortItems(){
 	    	
@@ -169,7 +245,7 @@ public class HomeViewController {
 						public void handle(ActionEvent e){
 							activePort = portItem.getText();
 							label_status.setText("Puerto " + activePort + " seleccionado.");
-							startCOMThread("Conectar");
+							startThread("Conectar");
 						}
 						
 					});
@@ -182,16 +258,25 @@ public class HomeViewController {
 	    }
 	    
 
-		protected void startCOMThread(String action){
-			Thread thread;
-			if (action.equals("Conectar"))
+		protected void startThread(String action){
+			Thread thread = null;
+			switch (action)
 			{
-			    thread = new Thread(OpenCOMTask());
-
+				case "Conectar" :
+					thread = new Thread(OpenCOMTask());
+					break;
+				case "Desconectar" :
+					thread = new Thread(CloseCOMTask());
+					break;
+				case "ReporteZ" :
+					thread = new Thread(PrintZReportTask());
+					break;
+				case "ReporteX" :
+					thread = new Thread(PrintXReportTask());
+					break;	
+			
 			}
-			else{
-				thread = new Thread(CloseCOMTask());
-			}
+			
 			
 			thread.setDaemon(true);
 		    thread.start();
@@ -213,8 +298,10 @@ public class HomeViewController {
 							@Override
 							public void run() {
 								item_conn.setText("Desconectar");
+								btn_printer.setTextFill(Color.web("#1bea25"));
 								label_status.setText("Conectado al puerto " + activePort);
 								btn_printer.setTextFill(Color.web("#1bea25"));
+								
 							}
 						});
 						return true;
@@ -259,4 +346,81 @@ public class HomeViewController {
 	    	
 	    }
 	    
+	    private Task<Void> PrintZReportTask(){
+	    	return new Task<Void>(){
+	    		
+	    		 @Override public Void call() throws Exception{
+	    			 
+	    			 final Db db = new Db();
+
+	    			 Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							
+			    			 if(db.testConnection()){
+				    				if(isPrinterConnected){
+				    					if(mainSoftPark.loggedUser.canPrintReportZ){
+				    						try {
+				    							fiscalPrinter.printZReport();
+				    						} catch (PrinterException e) {
+				    							MessageBox.show(homeStage, "Error", "Error al imprimir el reporte Z","Error al imprimir: " + e.toString(), MessageBox.typeError);
+				    						}
+				    					}else{
+				    						MessageBox.show(homeStage, "Error", "Acceso no autorizado", " ", MessageBox.typeError);
+				    					}
+				    				}
+				    				else{
+			    						MessageBox.show(homeStage, "Error", "La impresora no está conectada", "Verifique la conexión e intente de nuevo.", MessageBox.typeError);
+
+				    				}
+				    			}
+						}
+					});
+	    			 return null;
+	    			 
+	    		 }
+	    		
+	    	};
+	    	
+	    }
+	    
+	    private Task<Void> PrintXReportTask(){
+	    	return new Task<Void>(){
+	    		
+	    		 @Override public Void call() throws Exception{
+	    			 
+	    			 final Db db = new Db();
+
+	    			 Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							
+			    			 if(db.testConnection()){
+				    				if(isPrinterConnected){
+				    					if(mainSoftPark.loggedUser.canPrintReportX){
+				    						try {
+				    							fiscalPrinter.printXReport();
+				    						} catch (PrinterException e) {
+				    							MessageBox.show(homeStage, "Error", "Error al imprimir el reporte X","Error al imprimir: " + e.toString(), MessageBox.typeError);
+				    						}
+				    					}else{
+				    						MessageBox.show(homeStage, "Error", "Acceso no autorizado", " ", MessageBox.typeError);
+				    					}
+				    				}
+				    				else{
+			    						MessageBox.show(homeStage, "Error", "La impresora no está conectada", "Verifique la conexión e intente de nuevo.", MessageBox.typeError);
+
+				    				}
+				    			}
+						}
+					});
+	    			 return null;
+	    			 
+	    		 }
+	    		
+	    	};
+	    	
+	    }
+	    
+	  
 }

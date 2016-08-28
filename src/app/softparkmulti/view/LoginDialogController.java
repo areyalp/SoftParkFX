@@ -1,11 +1,14 @@
 package app.softparkmulti.view;
 
 import app.softparkmulti.util.MessageBox;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+import app.softparkmulti.MainSoftPark;
+import app.softparkmulti.model.Db;
 import app.softparkmulti.model.Login;
 
 public class LoginDialogController {
@@ -17,6 +20,7 @@ public class LoginDialogController {
 	@FXML
 	private Button btn_login;
 	
+	private MainSoftPark mainSoftPark;
 	private Stage dialogStage;
 	private boolean succeeded;
 	private boolean action; //true for access 
@@ -27,7 +31,11 @@ public class LoginDialogController {
 	@FXML
 	private void initialize(){
 		btn_login.setDefaultButton(true);
+		 Platform.runLater( () -> txtUser.requestFocus() );
 	}
+	
+	
+	
 	
 	public LoginDialogController() {
 		// TODO Auto-generated constructor stub
@@ -42,7 +50,14 @@ public class LoginDialogController {
         this.dialogStage = dialogStage;
     }
     
+	 /* Is called by the main application to give a reference back to itself.
+     * 
+     * @param mainApp
+     */
+    public void setMainApp(MainSoftPark mainApp) {
+        this.mainSoftPark = mainApp;
 
+    }
 	
 	
 	@FXML
@@ -53,10 +68,7 @@ public class LoginDialogController {
 		
 		if (Login.authenticate(username, password)) {
             succeeded = true;
-            MessageBox.show(dialogStage, "Acceso concedido", 
-        			"Usuario y contraseña válidos", 
-        			"You're good to go :)",
-        			MessageBox.typeConfirmation);
+            setUserInfo();
             dialogStage.close();
             action = true;
             //dispose();
@@ -70,6 +82,7 @@ public class LoginDialogController {
         	// reset username and password
             txtUser.setText("");
             txtPassword.setText("");
+            txtUser.requestFocus();
             succeeded = false;
         	
         }
@@ -99,6 +112,15 @@ public class LoginDialogController {
     public boolean getAction(){
     	return action;
     }
+    
+    public void setUserInfo(){
+    	Db db = new Db();
+	
+		 mainSoftPark.loggedUser = db.loadUserInfo(
+				 Db.getUserId(getUsername())
+				 );
+    }
+    
     
 
 	
