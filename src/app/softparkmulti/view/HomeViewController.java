@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import app.softparkmulti.MainSoftPark;
 import app.softparkmulti.model.Db;
+import app.softparkmulti.model.Login;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -80,7 +81,8 @@ public class HomeViewController {
 		@FXML
 		private void handleCobro(){
 			
-			MessageBox.show(homeStage, "Cobro", "Testing", " ", MessageBox.typeInformation);
+			//MessageBox.show(homeStage, "Cobro", "Testing", " ", MessageBox.typeInformation);
+			mainSoftPark.showPaymentView();
 		}
 		
 		@FXML
@@ -144,6 +146,8 @@ public class HomeViewController {
 			homeStage.hide();
 			if (mainSoftPark.showLoginDialog())
 			{
+				homeStage.setTitle("SoftPark - Home                                 "
+		        		+ "Bienvenido/a: " + Login.loggedUser.getName());
 				homeStage.show();
 			}
 		
@@ -359,7 +363,7 @@ public class HomeViewController {
 							
 			    			 if(db.testConnection()){
 				    				if(isPrinterConnected){
-				    					if(mainSoftPark.loggedUser.canPrintReportZ){
+				    					if(Login.loggedUser.canPrintReportZ){
 				    						try {
 				    							fiscalPrinter.printZReport();
 				    						} catch (PrinterException e) {
@@ -397,7 +401,7 @@ public class HomeViewController {
 							
 			    			 if(db.testConnection()){
 				    				if(isPrinterConnected){
-				    					if(mainSoftPark.loggedUser.canPrintReportX){
+				    					if(Login.loggedUser.canPrintReportX){
 				    						try {
 				    							fiscalPrinter.printXReport();
 				    						} catch (PrinterException e) {

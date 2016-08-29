@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import app.softparkmulti.util.*?>
+
+<AnchorPane prefHeight="318.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.softparkmulti.view.PaymentViewController">
+   <children>
+      <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="30.0">
+         <children>
+            <Button layoutX="246.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Aceptar" />
+            <Button layoutX="366.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Cancelar" />
+         </children>
+      </HBox>
+      <HBox layoutX="103.0" layoutY="37.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+         <children>
+            <Group>
+               <children>
+                  <Label layoutX="51.0" layoutY="29.0" text="Datos del Ticket" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="29.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <GridPane layoutX="39.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="324.0" AnchorPane.bottomAnchor="101.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="654.0" AnchorPane.topAnchor="59.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="122.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="251.0" minWidth="10.0" prefWidth="165.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="CENTER_RIGHT" text="Número" textAlignment="RIGHT" GridPane.halignment="RIGHT">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" text="Fecha de entrada" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" text="Entrada" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" text="Duración" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txt_ticketEntrance" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label alignment="BOTTOM_LEFT" text="Expiración" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txt_ticketExpiry" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txt_ticketNumber" GridPane.columnIndex="1" />
+                        <TextField fx:id="txt_ticketTimeSpent" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="dp_ticketDateIn" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </Group>
+            <HBox id="carView" layoutX="417.0" layoutY="59.0" prefHeight="146.0" prefWidth="184.0" stylesheets="@../../../../resources/css/Style.css">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="423.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../resources/images/image404.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="15.0" left="60.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </HBox>
+            <Group>
+               <children>
+                  <GridPane layoutX="630.0" layoutY="59.0" prefHeight="90.0" prefWidth="253.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="103.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <NumericField id="numericField1" fx:id="txt_ticketPayHanded" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <NumericField id="numericField2" fx:id="txt_ticketPayReturned" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Entregado" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label text="Total" GridPane.halignment="RIGHT">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label text="Vuelto" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="view_ticketTotal" text="Label" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
+                  <Label layoutX="645.0" layoutY="29.0" text="Pago">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Group>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

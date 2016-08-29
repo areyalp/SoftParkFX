@@ -61,7 +61,13 @@
     -fx-background-size: 10 10;
     -fx-background-repeat: no-repeat;
     -fx-background-position:left;   
-   
-	
+
 }
+
+#carView{
+	-fx-border-color:black ;
+	-fx-border-insets:3;
+	-fx-border-width:1.0;
+}
+
 

@@ -6,6 +6,9 @@ import app.softparkmulti.util.PasswordEncryptor;
 
 public class Login {
 
+	public static User loggedUser;
+	
+	
 	public static boolean authenticate(String username, String plainPassword){
 		boolean isPasswordOk = false;
 		boolean authenticated = false;
@@ -27,5 +30,13 @@ public class Login {
 		}
 		return authenticated;
 	}
+	
+    public static void setUserInfo(String username){
+    	Db db = new Db();
+	
+		 loggedUser = db.loadUserInfo(
+				 Db.getUserId(username)
+				 );
+    }
 	
 }

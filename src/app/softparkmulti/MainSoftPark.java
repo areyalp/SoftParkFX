@@ -3,6 +3,7 @@ package app.softparkmulti;
 import java.io.IOException;
 
 import app.softparkmulti.model.Db;
+import app.softparkmulti.model.Login;
 import app.softparkmulti.model.User;
 import app.softparkmulti.view.HomeViewController;
 import app.softparkmulti.view.LoginDialogController;
@@ -20,8 +21,6 @@ public class MainSoftPark extends Application {
 
 	private Stage primaryStage;
 	private  BorderPane homeView;
-	//public String loggedUser = "";
-	public User loggedUser;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -84,7 +83,7 @@ public class MainSoftPark extends Application {
 	        Scene scene = new Scene(homeView);
 	        primaryStage.setScene(scene);
 	        primaryStage.setTitle("SoftPark - Home                                 "
-	        		+ "Bienvenido/a: " + loggedUser.getName());
+	        		+ "Bienvenido/a: " + Login.loggedUser.getName());
 	        primaryStage.setMaximized(true);
             primaryStage.show();
             
@@ -103,7 +102,7 @@ public class MainSoftPark extends Application {
     		// Load the root fxml file
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(MainSoftPark.class.getResource("view/ticketLostView.fxml"));
-	        SplitPane ticketLostView = (SplitPane) loader.load();
+	        AnchorPane ticketLostView = (AnchorPane) loader.load();
 	        
 	     // Set ticketLostView into the center of root layout.
 	        homeView.setCenter(ticketLostView);
@@ -116,6 +115,27 @@ public class MainSoftPark extends Application {
     	}catch (IOException e) {
 	        e.printStackTrace();
 	    }
+    	
+    	
+    }
+    
+    public void showPaymentView(){
+    	try{
+    		// Load the root fxml file
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(MainSoftPark.class.getResource("view/paymentView.fxml"));
+	        AnchorPane paymentView = (AnchorPane)loader.load();
+    		
+	        // Set paymentView into the center of root layout.
+	        homeView.setCenter(paymentView);
+	        
+	        
+	        
+	        
+    	}catch(IOException e){
+    		e.printStackTrace();
+    		
+    	}
     	
     	
     }

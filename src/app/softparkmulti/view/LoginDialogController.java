@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import app.softparkmulti.MainSoftPark;
-import app.softparkmulti.model.Db;
 import app.softparkmulti.model.Login;
 
 public class LoginDialogController {
@@ -68,7 +67,7 @@ public class LoginDialogController {
 		
 		if (Login.authenticate(username, password)) {
             succeeded = true;
-            setUserInfo();
+            Login.setUserInfo(getUsername());
             dialogStage.close();
             action = true;
             //dispose();
@@ -112,16 +111,6 @@ public class LoginDialogController {
     public boolean getAction(){
     	return action;
     }
-    
-    public void setUserInfo(){
-    	Db db = new Db();
-	
-		 mainSoftPark.loggedUser = db.loadUserInfo(
-				 Db.getUserId(getUsername())
-				 );
-    }
-    
-    
 
 	
 	
