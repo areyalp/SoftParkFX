@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import app.softparkmulti.util.*?>
 
-
-<AnchorPane prefHeight="449.0" prefWidth="1017.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="561.0" prefWidth="1017.0" stylesheets="@../../../../resources/css/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.softparkmulti.view.TicketLostViewController">
    <children>
       <Group AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
          <children>
@@ -49,10 +48,10 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <ComboBox prefHeight="25.0" prefWidth="174.0" GridPane.columnIndex="1" />
-                  <TextField prefHeight="25.0" prefWidth="144.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="3">
+                  <ComboBox fx:id="combo_lostType" prefHeight="25.0" prefWidth="174.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="txt_carPlate" prefHeight="25.0" prefWidth="144.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txt_ID" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txt_stationEntrance" GridPane.columnIndex="3">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -75,9 +74,9 @@
                         <Insets right="10.0" />
                      </padding>
                   </Label>
-                  <ComboBox prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <DatePicker GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <DatePicker GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="combo_entranceLevel" prefHeight="25.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <DatePicker fx:id="dp_DateInit" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="dp_DateEnd" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                </children>
                <padding>
                   <Insets top="50.0" />
@@ -92,10 +91,16 @@
       </Group>
       <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="30.0">
          <children>
+            <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Reportar" />
             <Button layoutX="246.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Aceptar" />
             <Button layoutX="366.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Cancelar" />
          </children>
       </HBox>
-      <Button layoutX="810.0" layoutY="103.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="102.0" text="Buscar" />
+      <Button id="btn_find" layoutX="810.0" layoutY="103.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="135.0" text="Buscar">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Pane layoutX="17.0" layoutY="233.0" prefHeight="232.0" prefWidth="977.0" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
    </children>
 </AnchorPane>

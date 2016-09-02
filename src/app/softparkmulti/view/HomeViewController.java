@@ -1,6 +1,7 @@
 package app.softparkmulti.view;
 
 import app.softparkmulti.model.PrinterCommand;
+import app.softparkmulti.model.User;
 import app.softparkmulti.util.CommPortUtils;
 import app.softparkmulti.util.MessageBox;
 
@@ -50,7 +51,7 @@ public class HomeViewController {
 	
 	
 	private MainSoftPark mainSoftPark;
-	private LoginDialogController loginDialog;
+	private SupervisorDialogController superLoginDialog;
 	private Stage homeStage;
 	
 	private boolean isPrinterConnected;
@@ -156,22 +157,41 @@ public class HomeViewController {
 		
 		@FXML
 		private void handleZReport(){
-			startThread("ReporteZ");
+			
+			if (mainSoftPark.showSupervisorDialog())
+			{
+				final Db db = new Db();
+				User supervisor = db.loadUserInfo(superLoginDialog.getSuperID());
+				if(supervisor.canPrintReportZ) {
+
+						startThread("ReporteZ");
+
+				}else{
+					MessageBox.show(homeStage, "Error", 
+				
+	        			"Acceso no autorizado.", 
+	        			"El usuario ingresado no tiene permisos para generar el reporte Z.",
+	        			MessageBox.typeError);
+				}
+			
+			} else{
+	        	MessageBox.show(homeStage, "Acceso denegado", 
+	        			"Usuario o contraseña inválidos", 
+	        			"Por favor, verifique las credenciales introducidas.",
+	        			MessageBox.typeError);
+			}
 		}
+		
 		
 		@FXML
 		private void handleXReport(){
+			
 			startThread("ReporteX");
+	
 		}
 		
-		 /* Is called by the main application to give a reference back to itself.
-	     * 
-	     * @param mainApp
-	     */
-	    public void setMainApp(MainSoftPark mainApp) {
-	        this.mainSoftPark = mainApp;
+		
 
-	    }
 	    
 	    @FXML
 	    private void handleToolBar(){
@@ -214,10 +234,19 @@ public class HomeViewController {
 				ex.printStackTrace();
 			}
 	    }
-	    
-	    public void setLogin(LoginDialogController login) {
-	        this.loginDialog = login;
+	    	
+	    /* Is called by the main application to give a reference back to itself.
+	     * 
+	     * @param mainApp
+	     */
+	    public void setMainApp(MainSoftPark mainApp) {
+	        this.mainSoftPark = mainApp;
 
+	    }
+	    
+	    public void setSupervisorDialog(SupervisorDialogController superLogin){
+	    	this.superLoginDialog = superLogin;
+	    	
 	    }
 		
 	    public void setDialogStage(Stage dialogStage) {
@@ -363,15 +392,15 @@ public class HomeViewController {
 							
 			    			 if(db.testConnection()){
 				    				if(isPrinterConnected){
-				    					if(Login.loggedUser.canPrintReportZ){
+				    					//if(Login.loggedUser.canPrintReportZ){
 				    						try {
 				    							fiscalPrinter.printZReport();
 				    						} catch (PrinterException e) {
 				    							MessageBox.show(homeStage, "Error", "Error al imprimir el reporte Z","Error al imprimir: " + e.toString(), MessageBox.typeError);
 				    						}
-				    					}else{
+				    					/*}else{
 				    						MessageBox.show(homeStage, "Error", "Acceso no autorizado", " ", MessageBox.typeError);
-				    					}
+				    					}*/
 				    				}
 				    				else{
 			    						MessageBox.show(homeStage, "Error", "La impresora no está conectada", "Verifique la conexión e intente de nuevo.", MessageBox.typeError);

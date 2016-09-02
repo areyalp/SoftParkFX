@@ -83,6 +83,7 @@ public class LoginDialogController {
             txtPassword.setText("");
             txtUser.requestFocus();
             succeeded = false;
+            action = false;
         	
         }
 		

@@ -2,16 +2,13 @@ package app.softparkmulti;
 
 import java.io.IOException;
 
-import app.softparkmulti.model.Db;
 import app.softparkmulti.model.Login;
-import app.softparkmulti.model.User;
 import app.softparkmulti.view.HomeViewController;
 import app.softparkmulti.view.LoginDialogController;
-import app.softparkmulti.view.TicketLostViewController;
+import app.softparkmulti.view.SupervisorDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -21,6 +18,7 @@ public class MainSoftPark extends Application {
 
 	private Stage primaryStage;
 	private  BorderPane homeView;
+	private HomeViewController homeController;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -64,8 +62,10 @@ public class MainSoftPark extends Application {
             //Show the root stage
             loginStage.setScene(scene);
             loginStage.setResizable(false);
+
             loginStage.showAndWait();
             result = loginController.getAction();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,7 +88,7 @@ public class MainSoftPark extends Application {
             primaryStage.show();
             
             //Instantiate the controller
-            HomeViewController homeController = loader.getController();
+            homeController = loader.getController();
             homeController.setDialogStage(primaryStage);
             homeController.setMainApp(this);
             
@@ -96,6 +96,39 @@ public class MainSoftPark extends Application {
 	        e.printStackTrace();
 	    }
 	}
+    
+    public boolean showSupervisorDialog() {
+   	
+    	boolean result = false;
+        try {
+        	//Load fxml layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainSoftPark.class.getResource("view/supervisorDialog.fxml"));
+            AnchorPane superDialog = (AnchorPane) loader.load();
+
+         // Create the dialog Stage.
+            Stage superStage = new Stage();
+            superStage.initOwner(primaryStage);
+	        
+            Scene scene = new Scene(superDialog);
+            //Show the root stage
+            superStage.setScene(scene);
+            superStage.setResizable(false);
+
+
+            SupervisorDialogController superController = loader.getController();
+            superController.setDialogStage(superStage);
+            homeController.setSupervisorDialog(superController);
+            superStage.showAndWait();
+            
+            result = superController.isSucceeded();
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
     
     public void showTicketLostView(){
     	try{
@@ -137,8 +170,8 @@ public class MainSoftPark extends Application {
     		
     	}
     	
-    	
     }
+    
     
     
     
