@@ -1,5 +1,6 @@
 package app.softparkmulti.view;
 
+import app.softparkmulti.model.Login;
 import app.softparkmulti.util.MaskField;
 import app.softparkmulti.util.NumericField;
 import javafx.fxml.FXML;
@@ -125,6 +126,17 @@ public class PaymentViewController {
 	@FXML
 	private void initialize(){
 		group_DE.setVisible(false);
+		
+		switch (Login.fromStation.getId())
+		{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			
+		}
 	}
 	
 	

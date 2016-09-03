@@ -71,7 +71,7 @@ public class Db {
 		return false;
 	}
 	
-	protected ResultSet select(String queryString) {
+	public ResultSet select(String queryString) {
 		ResultSet queryResult = null;
 		Statement sqlState;
 		try {

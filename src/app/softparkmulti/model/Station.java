@@ -3,18 +3,20 @@ package app.softparkmulti.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class Station
     {
         int id;
         int type;
         String name;
         
-        Station(int id, int type, String name)
+        public Station(int id, int type, String name)
         {
         	this.id = id;
         	this.type = type;
         	this.name = name;
         }
+        
         
         public int getId()
         {
@@ -60,4 +62,7 @@ public class Station
     		
     		return stationInfo;
     	}
+    
+        
+    
     }

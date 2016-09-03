@@ -7,8 +7,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+
+import java.sql.ResultSet;
+
 import app.softparkmulti.MainSoftPark;
+import app.softparkmulti.model.Db;
+import app.softparkmulti.model.GetNetworkAddress;
 import app.softparkmulti.model.Login;
+import app.softparkmulti.model.Station;
 
 public class LoginDialogController {
 
@@ -31,6 +37,7 @@ public class LoginDialogController {
 	private void initialize(){
 		btn_login.setDefaultButton(true);
 		 Platform.runLater( () -> txtUser.requestFocus() );
+		 checkStation();
 	}
 	
 	
@@ -94,6 +101,64 @@ public class LoginDialogController {
 		dialogStage.close();
 		
 	}
+	
+	public void checkStation(){
+		
+    	try{
+			Db db = new Db();
+			String macAddress = GetNetworkAddress.GetAddress("mac");
+			
+			/*MessageBox.show(dialogStage, 
+    				"Test",
+    				"MAC is:", 
+    				macAddress, 
+    				MessageBox.typeInformation);*/
+			
+			
+			if(!(macAddress == null)){
+				if(true) {
+					
+					ResultSet rowsMac = db.select("SELECT Id, TypeId, Name FROM Stations WHERE"
+							+ " MacAddress = '" + macAddress + "'");
+					
+					if(rowsMac.next()){
+						
+						Login.fromStation = 
+								new Station(
+								rowsMac.getInt("Id"),
+								rowsMac.getInt("TypeId"),
+								rowsMac.getString("Name"));
+						
+						MessageBox.show(dialogStage, 
+			    				"Test Station",
+			    				"La estación seleccionada es:", 
+			    				rowsMac.getString("Name"), 
+			    				MessageBox.typeInformation);
+						
+						
+					}else{
+						
+						//select one station from a list
+					}
+				}
+			}else{
+				
+				MessageBox.show(dialogStage, 
+	    				"Error al obtener la estación",
+	    				"No está conectado a la red", 
+	    				"Conéctese a la red e intente de nuevo", 
+	    				MessageBox.typeError);
+				
+			}
+    	}catch(Exception ex){
+    		
+    		MessageBox.show(dialogStage, 
+    				"Error al obtener la estación",
+    				"Ocurrió un error al tratar de obtener la dirección MAC de la estación. ", 
+    				"Detalle: " + ex.toString(), 
+    				MessageBox.typeError);
+    	}
+    }
 	
 	
 	protected String getUsername() {

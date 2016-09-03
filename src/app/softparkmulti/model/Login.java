@@ -7,7 +7,7 @@ import app.softparkmulti.util.PasswordEncryptor;
 public class Login {
 
 	public static User loggedUser;
-	
+	public static Station fromStation;
 	
 	public static boolean authenticate(String username, String plainPassword){
 		boolean isPasswordOk = false;
@@ -39,4 +39,6 @@ public class Login {
 				 );
     }
 	
+    
+    
 }
