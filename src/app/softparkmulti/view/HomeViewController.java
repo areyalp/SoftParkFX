@@ -40,8 +40,11 @@ public class HomeViewController {
 	private MenuItem item_conn,item_test, item_calc,
 		item_ZReport,item_XReport,item_logout,item_exit;
 	@FXML
+	private MenuItem item_clearView;
+	@FXML
 	private CheckMenuItem item_viewToolBar,
 		item_viewStatusBar;
+	
 	@FXML
 	private HBox toolBar;
 	@FXML
@@ -83,19 +86,19 @@ public class HomeViewController {
 		private void handleCobro(){
 			
 			//MessageBox.show(homeStage, "Cobro", "Testing", " ", MessageBox.typeInformation);
-			mainSoftPark.showPaymentView();
+			mainSoftPark.showPaymentView(false,false);
 		}
 		
 		@FXML
 		private void handleTicket_Manual(){
-			
-			MessageBox.show(homeStage, "Ticket manual", "Testing", " ", MessageBox.typeInformation);
+			mainSoftPark.showPaymentView(false,true);
 		}
 		
 		@FXML
 		private void handleTicket_Lost(){
 			//MessageBox.show(homeStage, "Ticket perdido", "Testing", " ", MessageBox.typeInformation);
-			mainSoftPark.showTicketLostView();
+			//mainSoftPark.showTicketLostView();
+			mainSoftPark.showPaymentView(true,false);
 		}
 		
 		@FXML
@@ -182,15 +185,12 @@ public class HomeViewController {
 			}
 		}
 		
-		
 		@FXML
 		private void handleXReport(){
 			
 			startThread("ReporteX");
 	
 		}
-		
-		
 
 	    
 	    @FXML
@@ -233,6 +233,11 @@ public class HomeViewController {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+	    }
+	    
+	    @FXML
+	    private void handleClearView(){
+	    	mainSoftPark.showClearView();
 	    }
 	    	
 	    /* Is called by the main application to give a reference back to itself.

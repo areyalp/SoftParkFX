@@ -319,7 +319,7 @@ public class Db {
 		return vehicles;
 	}
 	
-	protected static ArrayList<Transaction> loadTransactionTypes() {
+	public static ArrayList<Transaction> loadTransactionTypes() {
 		ArrayList<Transaction> transactionTypes = null;
 		Db db = new Db();
 		ResultSet rowsTransactionTypes = db.select("SELECT "
@@ -383,5 +383,8 @@ public class Db {
 		}
 		return isTicketProcessed;
 	}
+	
+	
+	
 
 }

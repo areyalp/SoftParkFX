@@ -5,6 +5,7 @@ import java.io.IOException;
 import app.softparkmulti.model.Login;
 import app.softparkmulti.view.HomeViewController;
 import app.softparkmulti.view.LoginDialogController;
+import app.softparkmulti.view.PaymentViewController;
 import app.softparkmulti.view.SupervisorDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -92,6 +93,8 @@ public class MainSoftPark extends Application {
             homeController.setDialogStage(primaryStage);
             homeController.setMainApp(this);
             
+            
+            
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
@@ -152,14 +155,19 @@ public class MainSoftPark extends Application {
     	
     }
     
-    public void showPaymentView(){
+    public void showPaymentView(boolean isLost, boolean isManual){
     	try{
     		// Load the root fxml file
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(MainSoftPark.class.getResource("view/paymentView.fxml"));
 	        AnchorPane paymentView = (AnchorPane)loader.load();
     		
+	        PaymentViewController paymentController = loader.getController();
+	        paymentController.setDialogStage(primaryStage);
+	        paymentController.setTicketLost(isLost);
+	        paymentController.setTicketManual(isManual);
 	        // Set paymentView into the center of root layout.
+
 	        homeView.setCenter(paymentView);
 	        
 	        
@@ -173,6 +181,17 @@ public class MainSoftPark extends Application {
     }
     
     
+    public void showClearView(){
+    	try{
+    		AnchorPane cleanView = new AnchorPane();
+    		homeView.setCenter(cleanView);
+
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		
+    	}
+    	
+    }
     
     
 	

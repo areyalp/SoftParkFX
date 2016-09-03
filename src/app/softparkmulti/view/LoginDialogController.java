@@ -129,12 +129,6 @@ public class LoginDialogController {
 								rowsMac.getInt("TypeId"),
 								rowsMac.getString("Name"));
 						
-						MessageBox.show(dialogStage, 
-			    				"Test Station",
-			    				"La estación seleccionada es:", 
-			    				rowsMac.getString("Name"), 
-			    				MessageBox.typeInformation);
-						
 						
 					}else{
 						
