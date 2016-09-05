@@ -40,9 +40,7 @@ public class LoginDialogController {
 		 checkStation();
 	}
 	
-	
-	
-	
+
 	public LoginDialogController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -129,6 +127,11 @@ public class LoginDialogController {
 								rowsMac.getInt("TypeId"),
 								rowsMac.getString("Name"));
 						
+						MessageBox.show(dialogStage, 
+			    				"Test",
+			    				"Station: ", 
+			    				Login.fromStation.getName(), 
+			    				MessageBox.typeInformation);
 						
 					}else{
 						

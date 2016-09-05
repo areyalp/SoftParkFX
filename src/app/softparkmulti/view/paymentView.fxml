@@ -25,7 +25,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <NumericField id="numericField1" fx:id="txt_ticketPayHanded" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <NumericField id="numericField1" fx:id="txt_ticketPayHanded" onKeyReleased="#handleTicketPH_keyReleased" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <NumericField id="numericField2" fx:id="txt_ticketPayReturned" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Entregado" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <padding>
@@ -58,11 +58,11 @@
       </Group>
       <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="30.0">
          <children>
-            <Button layoutX="246.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Aceptar" />
-            <Button layoutX="366.0" layoutY="175.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="88.0" text="Cancelar" />
+            <Button fx:id="btn_accept" layoutX="246.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleAccept" prefHeight="39.0" prefWidth="88.0" text="Aceptar" />
+            <Button fx:id="btn_cancel" layoutX="366.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="39.0" prefWidth="88.0" text="Cancelar" />
          </children>
       </HBox>
-      <Group layoutX="-10.0" layoutY="1.0">
+      <Group fx:id="group_ticket" layoutX="-10.0" layoutY="1.0">
          <children>
             <Label layoutX="51.0" layoutY="29.0" text="Datos del Ticket" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="29.0">
                <font>
@@ -109,7 +109,7 @@
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txt_ticketExpiry" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="txt_ticketNumber" GridPane.columnIndex="1" />
+                  <TextField fx:id="txt_ticketNumber" onKeyReleased="#handleTicketN_keyReleased" GridPane.columnIndex="1" />
                   <TextField fx:id="txt_ticketTimeSpent" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <MaskField fx:id="dp_ticketDateIn" mask="DD/DD/DDDD Hora:DD:DD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>

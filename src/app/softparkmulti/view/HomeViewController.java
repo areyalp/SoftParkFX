@@ -79,7 +79,14 @@ public class HomeViewController {
 		@FXML
 		private void handleCierre(){
 			
-			MessageBox.show(homeStage, "Cierre", "Testing ", " ", MessageBox.typeInformation);
+			//MessageBox.show(homeStage, "Cierre", "Testing ", " ", MessageBox.typeInformation);
+			if (MessageBox.confirm(homeStage, "Generar Reporte X", 
+					"¿Está seguro de que desea realizar el cierre?", 
+					"Si selecciona OK se generará el reporte X")){
+			    
+				startThread("ReporteX");
+				
+			} 
 		}
 		
 		@FXML
@@ -188,10 +195,18 @@ public class HomeViewController {
 		@FXML
 		private void handleXReport(){
 			
-			startThread("ReporteX");
+			if (MessageBox.confirm(homeStage, "Generar Reporte X", 
+					"¿Está seguro de que desea realizar el cierre?", 
+					"Si selecciona OK se generará el reporte X")){
+			    
+				startThread("ReporteX");
+				
+			} 
 	
 		}
 
+		
+		
 	    
 	    @FXML
 	    private void handleToolBar(){

@@ -2,23 +2,37 @@ package app.softparkmulti.view;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 import app.softparkmulti.model.Db;
 import app.softparkmulti.model.Login;
+import app.softparkmulti.model.Ticket;
 import app.softparkmulti.model.Transaction;
+import app.softparkmulti.util.DateUtil;
 import app.softparkmulti.util.MaskField;
 import app.softparkmulti.util.MessageBox;
 import app.softparkmulti.util.NumericField;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class PaymentViewController {
+	
+	@FXML
+	private Button btn_accept;
+	
+	@FXML
+	private Button btn_cancel;
 	
 	@FXML
 	private TextField txt_ticketNumber;
@@ -111,6 +125,9 @@ public class PaymentViewController {
 	private NumericField txt_ticketPayReturned;
 	
 	@FXML
+	private Group group_ticket;
+	
+	@FXML
 	private Group group_DP;
 	
 	@FXML
@@ -164,10 +181,24 @@ public class PaymentViewController {
 		
 	}
     
+    private double calcChange(double value1, double value2){
+    	if (value2 > value1)
+    		return value2 - value1;
+    	else
+    		return 0;
+    }
+
+    private boolean getPayState(double value1,double value2){
+    	if (value1 >= value2)
+    		return true;
+    	else
+    		return false;
+    }
+    
     private void init_groups()
     {
 		group_DE.setVisible(false);
-		
+		btn_accept.setDisable(true);
 		if (!getTicketManual() && !getTicketLost()){
 
 			group_Vehicle.setVisible(false);
@@ -189,7 +220,52 @@ public class PaymentViewController {
 
 		
     }
+    
+    private void fieldsState(boolean state)  {
+    	if (state)
+    	{
+    		txt_ticketNumber.setEditable(true);
+    		txt_ticketEntrance.setEditable(true);
+    		txt_ticketTimeSpent.setEditable(true);
+    		txt_ticketExpiry.setEditable(true);
+    		dp_ticketDateIn.setEditable(true);
+    		txt_ticketNumber.clear();
+    		txt_ticketEntrance.clear();
+    		txt_ticketTimeSpent.clear();
+    		txt_ticketExpiry.clear();
+    		dp_ticketDateIn.clear();
+    		txt_ticketPayReturned.clear();
+    		txt_ticketPayHanded.clear();
+    		Platform.runLater(() ->txt_ticketNumber.requestFocus());
+    		
+    		
+    	}else{
+    		
+    		txt_ticketNumber.setEditable(false);
+    		txt_ticketEntrance.setEditable(false);
+    		txt_ticketTimeSpent.setEditable(false);
+    		txt_ticketExpiry.setEditable(false);
+    		dp_ticketDateIn.setEditable(false);
+    		txt_ticketPayReturned.setEditable(false);
+    		Platform.runLater(() ->txt_ticketPayHanded.requestFocus());
+    		
+    	}
+    }
+    
+    
+    
+    private void loadTicketUI(Ticket ticket){
+    	txt_ticketEntrance.setText(Integer.toString(ticket.getEntryStationId()));		
 
+    	String duration = DateUtil.getDuration(new DateTime(ticket.getEntryDate()), 
+    			DateTime.now());
+	
+    	txt_ticketTimeSpent.setText(duration);
+    	
+    	 dp_ticketDateIn.setText(ticket.getEntryDate().toString());
+    	
+    }
+    
     private void setTType(int stationType){
     	switch (stationType)
 		{
@@ -212,6 +288,8 @@ public class PaymentViewController {
     	
     }
     
+
+    
 	@FXML
 	private void initialize(){
 
@@ -219,7 +297,46 @@ public class PaymentViewController {
 		 Platform.runLater(() ->txt_ticketNumber.requestFocus());
 		 setTType(Login.fromStation.getType());
 		view_ticketTotal.setText(getStationAmount(indexTType) + " Bs.");
+
 		
+	}
+	
+	
+	@FXML
+	private void handleTicketN_keyReleased(KeyEvent event){
+		if (event.getCode() == KeyCode.ENTER){
+		    int ticketNum = Integer.parseInt(txt_ticketNumber.getText());
+		    Db db = new Db();
+		    Ticket ticket = db.loadTicketInfo(ticketNum);
+		    if (ticket!=null){
+		    	loadTicketUI(ticket);
+		    	fieldsState(false);
+		    }else{
+		    	
+		    	MessageBox.show(dialogStage, 
+		    			"Ticket no registrado", 
+		    			"El número de ticket ingresado no fue "
+		    			+ "encontrado en la base de datos", "", 
+		    			MessageBox.typeWarning);
+		    }
+		    	
+		  }
+	}
+	
+	@FXML
+	private void handleTicketPH_keyReleased(KeyEvent event){
+		double total = Double.parseDouble(view_ticketTotal.getText().substring(0,
+				view_ticketTotal.getText().length()-4));
+		double handed = 0;
+		String strHanded = txt_ticketPayHanded.getText();
+		if (!strHanded.equals("")){
+			handed = Double.parseDouble(strHanded);
+		}
+		double change = calcChange(total,handed);
+		txt_ticketPayReturned.setText(Double.toString(change));
+		if (getPayState(handed,total)){
+			btn_accept.setDisable(false);
+		}else{btn_accept.setDisable(true);}
 	}
 
 	@FXML
@@ -235,6 +352,16 @@ public class PaymentViewController {
 		
 	}
 	
+	@FXML 
+	private void handleAccept(){
+		
+	}
+	
+	@FXML
+	private void handleCancel(){
+		fieldsState(true);
+		
+	}
 	
 	
 

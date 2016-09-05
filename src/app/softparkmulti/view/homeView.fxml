@@ -19,24 +19,24 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Reimprimir Factura" />
+                    <MenuItem mnemonicParsing="false" text="Reimprimir Factura" visible="false" />
                         <MenuItem fx:id="item_logout" mnemonicParsing="false" onAction="#handleLogout" text="Cerrar Sesión" />
                         <MenuItem fx:id="item_exit" mnemonicParsing="false" onAction="#handleExit" text="Salir" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ver">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Resumen del Cierre Actual" />
+                    <MenuItem mnemonicParsing="false" text="Resumen del Cierre Actual" visible="false" />
                         <CheckMenuItem fx:id="item_viewToolBar" mnemonicParsing="false" onAction="#handleToolBar" selected="true" text="Barra de Herramientas" />
                         <CheckMenuItem fx:id="item_viewStatusBar" mnemonicParsing="false" onAction="#handleStatusBar" selected="true" text="Barra de Estado" />
-                        <MenuItem mnemonicParsing="false" text="Log" />
+                        <MenuItem mnemonicParsing="false" text="Log" visible="false" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Sistema">
                   <items>
                     <MenuItem fx:id="item_clearView" mnemonicParsing="false" onAction="#handleClearView" text="Limpiar Pantalla" />
-                        <MenuItem mnemonicParsing="false" text="Personalizar Factura" />
-                        <MenuItem mnemonicParsing="false" text="Detalle de Última Transacción" />
+                        <MenuItem mnemonicParsing="false" text="Personalizar Factura" visible="false" />
+                        <MenuItem mnemonicParsing="false" text="Detalle de Última Transacción" visible="false" />
                         <MenuItem fx:id="item_calc" mnemonicParsing="false" onAction="#handleCalc" text="Calculadora" />
                   </items>
                 </Menu>
@@ -46,7 +46,7 @@
                         <MenuItem fx:id="item_XReport" mnemonicParsing="false" onAction="#handleXReport" text="Reporte Fiscal X" />
                     </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Ayuda">
+                  <Menu mnemonicParsing="false" text="Ayuda" visible="false">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Acerca de" />
                     </items>

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -382,6 +383,34 @@ public class Db {
 			e.printStackTrace();
 		}
 		return isTicketProcessed;
+	}
+	
+	public Ticket loadTicketInfo(int ticketNumber){
+		Db db = new Db();
+		Ticket ticket = null;
+		ResultSet rowTicket = db.select("SELECT * "
+				+ "FROM Transactions "
+				+ "WHERE TicketNumber = " + ticketNumber);
+		try {
+			
+			while(rowTicket.next()){
+				
+			
+				ticket = new Ticket(rowTicket.getInt("Id"),
+						rowTicket.getInt("entryStationId"),
+						rowTicket.getInt("StationId"),
+						rowTicket.getInt("CardId"),
+						rowTicket.getInt("ticketNumber"),
+						rowTicket.getInt("summaryId"),
+						rowTicket.getDouble("totalAmount"),
+						rowTicket.getTimestamp("entryDate"),
+						rowTicket.getTimestamp("payDate"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ticket;
+		
 	}
 	
 	

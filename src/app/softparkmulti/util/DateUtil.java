@@ -4,10 +4,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Interval;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 public class DateUtil {
 
 	/** The date pattern that is used for conversion. Change as you wish. */
-    private static final String DATE_PATTERN = "dd.MM.yyyy";
+    private static final String DATE_PATTERN = "dd/MM/yyyy";
 
     /** The date formatter. */
     private static final DateTimeFormatter DATE_FORMATTER = 
@@ -56,7 +63,24 @@ public class DateUtil {
     }
 	
 	
-	
+	public static String getDuration(DateTime initDate, DateTime endDate){
+		
+		Duration duration = new Interval(initDate,endDate).toDuration();
+    	Period period = duration.toPeriod();
+    	PeriodFormatter periodFormatted = new PeriodFormatterBuilder()
+    	     .printZeroAlways()
+    	     .minimumPrintedDigits(2)
+    	     .appendHours()
+    	     .appendLiteral(":")
+    	     .appendMinutes()
+    	     .appendLiteral(":")
+    	     .appendSeconds()
+    	     .toFormatter();
+    	return periodFormatted.print(period);		
+    	
+		
+		
+	}
 	
 	public DateUtil() {
 		// TODO Auto-generated constructor stub
