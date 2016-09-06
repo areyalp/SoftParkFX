@@ -127,11 +127,11 @@ public class LoginDialogController {
 								rowsMac.getInt("TypeId"),
 								rowsMac.getString("Name"));
 						
-						MessageBox.show(dialogStage, 
+						/*MessageBox.show(dialogStage, 
 			    				"Test",
 			    				"Station: ", 
 			    				Login.fromStation.getName(), 
-			    				MessageBox.typeInformation);
+			    				MessageBox.typeInformation);*/
 						
 					}else{
 						

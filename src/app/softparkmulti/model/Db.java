@@ -116,7 +116,8 @@ public class Db {
 		return false;
 	}
 	
-	protected int insertTransaction(int stationId, int summaryId, int ticketNumber, double totalAmount, double taxAmount, 
+	public int insertTransaction(int stationId, int summaryId, int ticketNumber, 
+			double totalAmount, double taxAmount, 
 			int transactionTypeId, int payTypeId) {
 
 		String sql;
@@ -142,6 +143,35 @@ public class Db {
 		}
 		return insertedId;
 	}
+	
+	public int updateTransaction(int stationId, int summaryId, int ticketNumber, 
+			double totalAmount, double taxAmount,int transactionTypeId,
+			int payTypeId) {
+
+		String sql;
+		int insertedId = 0;
+		sql = "UPDATE Transactions SET" +
+				" TotalAmount =" + totalAmount 
+				+ " WHERE StationId = " + stationId + ";";
+		insertedId = this.insert(sql);
+		if(insertedId > 0) {
+			sql = "INSERT INTO TransactionsDetail (TransactionId,TypeId,TotalAmount,TaxAmount)"
+					+ " VALUES (" + insertedId + "," 
+					+ transactionTypeId + "," 
+					+ totalAmount + ","
+					+ taxAmount + ")";
+			this.insert(sql);
+			sql = "INSERT INTO TransactionsPay (TransactionId,PayTypeId,Amount)"
+					+ " VALUES (" + insertedId + "," 
+					+ payTypeId + "," 
+					+ totalAmount + ")";
+			this.insert(sql);
+		}
+		return insertedId;
+	}
+	
+	
+	
 	
 	protected int insertSummary(int stationId, int userId, int firstInvoiceNumber) {
 		String sql;

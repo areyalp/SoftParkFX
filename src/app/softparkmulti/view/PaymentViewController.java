@@ -1,13 +1,19 @@
 package app.softparkmulti.view;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import app.softparkmulti.model.Db;
 import app.softparkmulti.model.Login;
 import app.softparkmulti.model.Ticket;
 import app.softparkmulti.model.Transaction;
+import app.softparkmulti.model.Barcode;
 import app.softparkmulti.util.DateUtil;
 import app.softparkmulti.util.MaskField;
 import app.softparkmulti.util.MessageBox;
@@ -148,7 +154,16 @@ public class PaymentViewController {
 	private ArrayList<Transaction> transactionsType;
 	private int indexTType;
 	private Stage dialogStage;
-	private boolean isLost =false, isManual =false;
+	private boolean isLost =false, isManual =false, isFound = false, isBarcode=false;
+	//Barcode variables
+	private Barcode decodeBarcode;
+	private Ticket ticket;
+	private final StringBuffer barcode = new StringBuffer();
+	//private long lastEventTimeStamp = 0L;
+	//private final long THRESHOLD = 100;
+	private final int MIN_BARCODE_LENGTH = 8;
+	//
+	private final int TAX_AMOUNT = 12;
 
 
 	public PaymentViewController() {
@@ -188,6 +203,11 @@ public class PaymentViewController {
     		return 0;
     }
 
+    private double getTotal(String str){
+		return Double.parseDouble(str.substring(0,
+				str.length()-4));
+    }
+    
     private boolean getPayState(double value1,double value2){
     	if (value1 >= value2)
     		return true;
@@ -251,10 +271,11 @@ public class PaymentViewController {
     		
     	}
     }
-    
-    
-    
+
     private void loadTicketUI(Ticket ticket){
+    	
+    	txt_ticketNumber.setText(Integer.toString(ticket.getTicketNumber()));
+    	
     	txt_ticketEntrance.setText(Integer.toString(ticket.getEntryStationId()));		
 
     	String duration = DateUtil.getDuration(new DateTime(ticket.getEntryDate()), 
@@ -288,6 +309,20 @@ public class PaymentViewController {
     	
     }
     
+    private void processPay(int stationId, int ticketNumber, double totalAmount,
+    		int transactionTypeId, double taxAmount, int payTypeId, boolean isfound){
+    	
+    	Db db = new Db();
+    	
+    	if (isfound){
+    		db.updateTransaction(stationId, 0, ticketNumber,  totalAmount,
+	    			taxAmount, transactionTypeId, payTypeId);
+    	}else{
+    		db.insertTransaction(stationId, 0, ticketNumber,  totalAmount,
+	    			taxAmount, transactionTypeId, payTypeId);
+    	}
+    	
+    }
 
     
 	@FXML
@@ -301,32 +336,103 @@ public class PaymentViewController {
 		
 	}
 	
+	/*
+	@FXML
+	private void handleGlobal_keyTyped(KeyEvent kevent){
+		 long now = Instant.now().toEpochMilli();
+
+		    // events must come fast enough to separate from manual input
+		    if (now - this.lastEventTimeStamp > this.THRESHOLD) {
+		        barcode.delete(0, barcode.length());
+		    }
+		    this.lastEventTimeStamp = now;
+
+		    // ENTER comes as 0x000d
+		    if (kevent.getCode() == KeyCode.ENTER) {
+		        if (barcode.length() >= this.MIN_BARCODE_LENGTH) {
+		            System.out.println("barcode: " + barcode);
+		        }
+		        barcode.delete(0, barcode.length());
+		    } else {
+		        barcode.append(kevent.getCharacter());
+		    }
+		    MessageBox.show(dialogStage, "test", "barcode: ", barcode.toString(), MessageBox.typeInformation);
+		    kevent.consume();
+		
+	}
+	*/
 	
 	@FXML
 	private void handleTicketN_keyReleased(KeyEvent event){
-		if (event.getCode() == KeyCode.ENTER){
-		    int ticketNum = Integer.parseInt(txt_ticketNumber.getText());
+		
+		String strTicketNum = txt_ticketNumber.getText();
+
+			if (event.getCode() == KeyCode.ENTER){
+				if (!strTicketNum.equals("") && 
+						strTicketNum.length() < this.MIN_BARCODE_LENGTH )
+				{
+					try{
+					    int ticketNum = Integer.parseInt(strTicketNum.trim());
+					    if(!findTicket(ticketNum)){
+					    	MessageBox.show(dialogStage, 
+					    			"Ticket no registrado", 
+					    			"El número de ticket ingresado no fue "
+					    			+ "encontrado en la base de datos", "", 
+					    			MessageBox.typeWarning);
+					    }
+					}catch(Exception e){e.printStackTrace();}
+				}else{
+					barcode.append(strTicketNum);
+					txt_ticketNumber.clear();
+					if (barcode.length() >= 22)
+					{
+						//decode barcode 
+						processBarcode(barcode.toString());
+					}
+				}
+			  }
+		
+		
+	}
+	
+	private boolean findTicket(int ticketNum){
+		
+		try{
 		    Db db = new Db();
-		    Ticket ticket = db.loadTicketInfo(ticketNum);
+		    ticket = db.loadTicketInfo(ticketNum);
 		    if (ticket!=null){
 		    	loadTicketUI(ticket);
 		    	fieldsState(false);
-		    }else{
-		    	
-		    	MessageBox.show(dialogStage, 
-		    			"Ticket no registrado", 
-		    			"El número de ticket ingresado no fue "
-		    			+ "encontrado en la base de datos", "", 
-		    			MessageBox.typeWarning);
+		    	return true;
 		    }
-		    	
-		  }
+			}catch(Exception e){e.printStackTrace();}
+		return false;
 	}
+	
+	private void processBarcode(String barcode){
+		
+		decodeBarcode = new Barcode(barcode);
+
+		Ticket barcodeTicket = new Ticket(0,decodeBarcode.getEntryStationId(),
+				decodeBarcode.getStationId(), 0, decodeBarcode.getTicketNumber(), 0,
+				0, decodeBarcode.getEntryDate(),Timestamp.valueOf("1900-01-01 00:00:00"));
+		
+		//MessageBox.show(dialogStage,"Test", "barcode: ", entryStationId+stationId+ticketNumber+strDT , MessageBox.typeInformation);
+		
+		if(!findTicket(barcodeTicket.getTicketNumber())){
+			
+			loadTicketUI(barcodeTicket);
+			
+		}
+		//Barcode format
+		//EEESSSTTTTTTddmmyyhhmm
+		//0010010000070509160518
+	}
+	
 	
 	@FXML
 	private void handleTicketPH_keyReleased(KeyEvent event){
-		double total = Double.parseDouble(view_ticketTotal.getText().substring(0,
-				view_ticketTotal.getText().length()-4));
+		double total = getTotal(view_ticketTotal.getText());
 		double handed = 0;
 		String strHanded = txt_ticketPayHanded.getText();
 		if (!strHanded.equals("")){
@@ -354,7 +460,17 @@ public class PaymentViewController {
 	
 	@FXML 
 	private void handleAccept(){
+	
+		int stationId = 1;
+		if (ticket!=null)
+		{
+			stationId = ticket.getStationId();
+		}
 		
+			processPay(stationId,Integer.parseInt(txt_ticketNumber.getText()), 
+					getTotal(view_ticketTotal.getText()),
+					indexTType, this.TAX_AMOUNT, 0, isFound);
+
 	}
 	
 	@FXML
