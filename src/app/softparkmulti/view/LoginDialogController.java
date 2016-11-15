@@ -66,7 +66,7 @@ public class LoginDialogController {
 	
 	@FXML
 	private void handleLogin(){
-		
+		                       
 		String username = getUsername();
 		String password = getPassword();
 		
